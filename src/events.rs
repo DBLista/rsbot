@@ -24,9 +24,8 @@ impl Handler {
             return Ok(());
         }
 
-        let mut member = msg.member(&ctx).await?;
-
         if msg.content.contains("2137") {
+            let mut member = msg.member(&ctx).await?;
             member.add_role(&ctx, cfg.role_2137).await?;
         }
 
