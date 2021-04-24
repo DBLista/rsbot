@@ -24,7 +24,8 @@ impl Handler {
             return Ok(());
         }
 
-        if msg.content.contains("2137") {
+        let Time { h, m } = cfg.time;
+        if msg.content.contains(&format!("{}{}", h, m)) {
             let mut member = msg.member(&ctx).await?;
             member.add_role(&ctx, cfg.role_2137).await?;
         }
@@ -67,7 +68,7 @@ impl EventHandler for Handler {
 
     async fn message(&self, ctx: Context, msg: Message) {
         if let Err(why) = self.handle_message(ctx, msg).await {
-            println!("failed to handle message: {:?}", why);
+            eprintln!("failed to handle message: {:?}", why);
         }
     }
 

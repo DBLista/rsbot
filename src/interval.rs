@@ -43,7 +43,7 @@ async fn interval_task(cfg: &RwLockReadGuard<'_, Config>, ctx: Arc<Context>) -> 
 
             match res {
                 Ok(_) => println!("muted {}", m.user.tag()),
-                Err(why) => println!("failed to mute {}: {:?}", id, why),
+                Err(why) => eprintln!("failed to mute {}: {:?}", id, why),
             }
         }
     } else {
@@ -63,7 +63,7 @@ async fn interval_task(cfg: &RwLockReadGuard<'_, Config>, ctx: Arc<Context>) -> 
 
             match res {
                 Ok(_) => println!("unmuted {}", m.user.tag()),
-                Err(why) => println!("failed to unmute {}: {:?}", id, why),
+                Err(why) => eprintln!("failed to unmute {}: {:?}", id, why),
             }
         }
     }
@@ -82,7 +82,7 @@ pub async fn spawn(cfg_lock: Arc<RwLock<Config>>, ctx: Arc<Context>) {
         loop {
             interval.tick().await;
             if let Err(why) = interval_task(&cfg, ctx.to_owned()).await {
-                println!("error while unmuting: {:?}", why);
+                eprintln!("error while unmuting: {:?}", why);
             }
         }
     });

@@ -15,7 +15,6 @@ use tokio::sync::RwLock;
 #[tokio::main]
 async fn main() {
     let cfg = Config::load("config.toml").unwrap_or_else(|e| {
-        println!("{:?}", e);
         println!("failed to read config file, switching to env");
         envy::from_env().unwrap()
     });
@@ -34,6 +33,6 @@ async fn main() {
     }
 
     if let Err(why) = client.start().await {
-        println!("error while running the client: {:?}", why);
+        eprintln!("error while running the client: {:?}", why);
     }
 }
