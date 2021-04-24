@@ -20,7 +20,7 @@ impl Handler {
         let cfg_lock = (&ctx).get_config().await;
         let cfg = cfg_lock.read().await;
 
-        if msg.guild_id.unwrap_or(GuildId(0)) != cfg.guild {
+        if msg.guild_id != Some(GuildId(cfg.guild)) {
             return Ok(());
         }
 

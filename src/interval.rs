@@ -1,14 +1,16 @@
-use crate::config::*;
-use crate::utils::*;
+use std::sync::Arc;
+use std::time::Duration;
+
 use chrono::{Timelike, Utc};
 use chrono_tz::Europe;
 use serenity::client::Context;
 use serenity::http::CacheHttp;
 use serenity::model::id::RoleId;
-use std::sync::Arc;
-use std::time::Duration;
 use tokio::sync::{RwLock, RwLockReadGuard};
 use tokio::time::interval;
+
+use crate::config::*;
+use crate::utils::*;
 
 async fn interval_task(cfg: &RwLockReadGuard<'_, Config>, ctx: Arc<Context>) -> Result<(), Error> {
     let mut members = ctx
@@ -32,13 +34,14 @@ async fn interval_task(cfg: &RwLockReadGuard<'_, Config>, ctx: Arc<Context>) -> 
         println!("got {} users to mute", vec.len());
 
         for (id, m) in vec {
-            match m
+            let res = m
                 .add_roles(
                     &ctx,
                     &[RoleId(cfg.role_muted), RoleId(cfg.role_2137_active)],
                 )
-                .await
-            {
+                .await;
+
+            match res {
                 Ok(_) => println!("muted {}", m.user.tag()),
                 Err(why) => println!("failed to mute {}: {:?}", id, why),
             }
@@ -51,13 +54,14 @@ async fn interval_task(cfg: &RwLockReadGuard<'_, Config>, ctx: Arc<Context>) -> 
         println!("got {} users to unmute", vec.len());
 
         for (id, m) in vec {
-            match m
+            let res = m
                 .remove_roles(
                     ctx.http().as_ref(),
                     &[RoleId(cfg.role_2137_active), RoleId(cfg.role_muted)],
                 )
-                .await
-            {
+                .await;
+
+            match res {
                 Ok(_) => println!("unmuted {}", m.user.tag()),
                 Err(why) => println!("failed to unmute {}: {:?}", id, why),
             }
