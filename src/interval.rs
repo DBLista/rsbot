@@ -6,13 +6,15 @@ use chrono_tz::Europe;
 use serenity::client::Context;
 use serenity::http::CacheHttp;
 use serenity::model::id::RoleId;
-use tokio::sync::{RwLock, RwLockReadGuard};
+use tokio::sync::RwLock;
 use tokio::time::interval;
 
 use crate::config::*;
 use crate::utils::*;
 
-async fn interval_task(cfg: &RwLockReadGuard<'_, Config>, ctx: Arc<Context>) -> Result<(), Error> {
+async fn interval_task(cfg_lock: &Arc<RwLock<Config>>, ctx: Arc<Context>) -> Result<(), Error> {
+    let cfg = cfg_lock.read().await;
+
     let mut members = ctx
         .cache()
         .ok_or(Error::None("expected cache"))?
@@ -24,8 +26,9 @@ async fn interval_task(cfg: &RwLockReadGuard<'_, Config>, ctx: Arc<Context>) -> 
     let time = Utc::now().with_timezone(&Europe::Warsaw).time();
     let Time { h, m } = cfg.time;
 
-    if (time.hour(), time.minute()) == (h, m) {
-        println!("{}:{}!!!", h, m);
+    // 21:37, 21:36
+    if time.hour() == h && (time.minute() == m || time.minute() == m - 1) {
+        println!("{}:{} incoming", h, m);
 
         let vec: Vec<_> = members
             .iter_mut()
@@ -72,16 +75,18 @@ async fn interval_task(cfg: &RwLockReadGuard<'_, Config>, ctx: Arc<Context>) -> 
 }
 
 pub async fn spawn(cfg_lock: Arc<RwLock<Config>>, ctx: Arc<Context>) {
-    tokio::spawn(async move {
-        let cfg = cfg_lock.read().await;
+    let cfg = cfg_lock.read().await;
+    let secs = cfg.every_secs;
 
-        let mut interval = interval(Duration::from_secs(cfg.every_secs));
+    let c = cfg_lock.to_owned();
+    tokio::spawn(async move {
+        let mut interval = interval(Duration::from_secs(secs));
 
         println!("unmute thread started");
 
         loop {
             interval.tick().await;
-            if let Err(why) = interval_task(&cfg, ctx.to_owned()).await {
+            if let Err(why) = interval_task(&c, ctx.to_owned()).await {
                 eprintln!("error while unmuting: {:?}", why);
             }
         }

@@ -42,6 +42,8 @@
       <sourceFolder url="file://$MODULE_DIR$/target/debug/build/winapi-70d7385fdf66912b/out" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/target/debug/build/winapi-8a9566720af12fad/out" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/target/debug/build/winapi-c23f61c13a5e6f89/out" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/target/debug/build/chrono-tz-a4ea9faf3e338168/out" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/target/debug/build/memchr-85f4dd8b5ab800a4/out" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />

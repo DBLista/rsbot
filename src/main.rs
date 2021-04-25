@@ -1,4 +1,6 @@
+#[macro_use]
 mod config;
+#[macro_use]
 mod events;
 mod interval;
 mod utils;
@@ -14,7 +16,7 @@ use tokio::sync::RwLock;
 
 #[tokio::main]
 async fn main() {
-    let cfg = Config::load("config.toml").unwrap_or_else(|e| {
+    let cfg = Config::load("config.toml").unwrap_or_else(|_| {
         println!("failed to read config file, switching to env");
         envy::from_env().unwrap()
     });
@@ -23,7 +25,9 @@ async fn main() {
 
     let mut client = Client::builder(cfg.token)
         .event_handler(events::Handler)
-        .intents(GatewayIntents::GUILDS | GatewayIntents::GUILD_MEMBERS)
+        .intents(
+            GatewayIntents::GUILDS | GatewayIntents::GUILD_MEMBERS | GatewayIntents::GUILD_MESSAGES,
+        )
         .await
         .expect("error creating client");
 

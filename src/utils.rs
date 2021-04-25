@@ -4,6 +4,7 @@ use std::io;
 pub enum Error {
     Serenity(serenity::Error),
     Io(io::Error),
+    TryLock(tokio::sync::TryLockError),
     None(&'static str),
 }
 
@@ -19,3 +20,4 @@ macro_rules! from_error {
 
 from_error!(Serenity, serenity::Error);
 from_error!(Io, io::Error);
+from_error!(TryLock, tokio::sync::TryLockError);

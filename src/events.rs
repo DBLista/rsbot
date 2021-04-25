@@ -17,15 +17,16 @@ pub struct Handler;
 
 impl Handler {
     async fn handle_message(&self, ctx: Context, msg: Message) -> Result<(), Error> {
-        let cfg_lock = (&ctx).get_config().await;
-        let cfg = cfg_lock.read().await;
+        let lock = ctx.config_lock().await;
+        let mut cfg = lock.write().await;
 
         if msg.guild_id != Some(GuildId(cfg.guild)) {
             return Ok(());
         }
 
-        let Time { h, m } = cfg.time;
-        if msg.content.contains(&format!("{}{}", h, m)) {
+        if cfg.trigger().is_match(&msg.content) {
+            println!("adding 2137 role to {}", msg.author.tag());
+
             let mut member = msg.member(&ctx).await?;
             member.add_role(&ctx, cfg.role_2137).await?;
         }
@@ -37,8 +38,8 @@ impl Handler {
 #[async_trait]
 impl EventHandler for Handler {
     async fn guild_create(&self, ctx: Context, g: Guild, _: bool) {
-        let cfg_lock = (&ctx).get_config().await;
-        let cfg = cfg_lock.read().await;
+        let lock = ctx.config_lock().await;
+        let cfg = lock.read().await;
 
         if g.id == cfg.guild {
             println!("got guild {}", g.name);
@@ -61,7 +62,7 @@ impl EventHandler for Handler {
                 chunk.members.len()
             );
 
-            let cfg_lock = (&ctx).get_config().await;
+            let cfg_lock = ctx.config_lock().await;
             interval::spawn(cfg_lock, Arc::new(ctx)).await;
         }
     }
