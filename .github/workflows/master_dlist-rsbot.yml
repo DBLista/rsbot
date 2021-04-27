@@ -22,7 +22,7 @@ jobs:
     - name: Log in to registry
       uses: docker/login-action@v1
       with:
-        registry: https://bikeking.azurecr.io/
+        registry: https://${{ secrets.REGISTRY }}.azurecr.io/
         username: ${{ secrets.AzureAppService_ContainerUsername_dfc924154fcb4e2e856e4dd82949e6d3 }}
         password: ${{ secrets.AzureAppService_ContainerPassword_9b7ff35c403e46e99835d1160ae643c0 }}
 
@@ -30,7 +30,7 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         push: true
-        tags: ${{ secrets.AzureAppService_ContainerUsername_dfc924154fcb4e2e856e4dd82949e6d3 }}/rsbot:${{ github.sha }}
+        tags: ${{ secrets.REGISTRY }}.azurecr.io/rsbot:${{ github.sha }}
         file: ./Dockerfile
 
   deploy:
@@ -48,4 +48,4 @@ jobs:
         app-name: 'dlist-rsbot'
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_ae0dc01bcbdf4677aa25ddd5ed3b044c }}
-        images: 'bikeking.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_dfc924154fcb4e2e856e4dd82949e6d3 }}/rsbot:${{ github.sha }}'
+        images: '${{ secrets.REGISTRY }}.azurecr.io/rsbot:${{ github.sha }}'
