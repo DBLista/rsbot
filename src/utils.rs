@@ -5,7 +5,7 @@ pub enum Error {
     Serenity(serenity::Error),
     Io(io::Error),
     TryLock(tokio::sync::TryLockError),
-    None(&'static str),
+    Custom(&'static str),
 }
 
 macro_rules! from_error {

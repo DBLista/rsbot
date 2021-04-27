@@ -5,7 +5,7 @@ use serenity::client::Context;
 use serenity::prelude::TypeMapKey;
 use std::sync::Arc;
 use std::{fs, io};
-use tokio::sync::{RwLock, RwLockWriteGuard};
+use tokio::sync::RwLock;
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct Config {
@@ -41,9 +41,9 @@ impl Config {
     }
 }
 
-pub struct Container;
+pub struct ConfigContainer;
 
-impl TypeMapKey for Container {
+impl TypeMapKey for ConfigContainer {
     type Value = Arc<RwLock<Config>>;
 }
 
@@ -57,7 +57,7 @@ impl GetConfig for Context {
     async fn config_lock(&self) -> Arc<RwLock<Config>> {
         let data_read = self.data.read().await;
         data_read
-            .get::<Container>()
+            .get::<ConfigContainer>()
             .expect("Expected ConfigContainer in TypeMap.")
             .clone()
     }

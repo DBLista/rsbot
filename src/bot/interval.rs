@@ -17,10 +17,10 @@ async fn interval_task(cfg_lock: &Arc<RwLock<Config>>, ctx: Arc<Context>) -> Res
 
     let mut members = ctx
         .cache()
-        .ok_or(Error::None("expected cache"))?
+        .ok_or(Error::Custom("expected cache"))?
         .guild(cfg.guild)
         .await
-        .ok_or(Error::None("expected guild"))?
+        .ok_or(Error::Custom("expected guild"))?
         .members;
 
     let time = Utc::now().with_timezone(&Europe::Warsaw).time();
@@ -28,13 +28,13 @@ async fn interval_task(cfg_lock: &Arc<RwLock<Config>>, ctx: Arc<Context>) -> Res
     // 21:37, 21:36
     if time.hour() == cfg.time_h && (time.minute() == cfg.time_h || time.minute() == cfg.time_m - 1)
     {
-        println!("{}:{} incoming", cfg.time_h, cfg.time_m);
+        info!("{}:{} incoming", cfg.time_h, cfg.time_m);
 
         let vec: Vec<_> = members
             .iter_mut()
             .filter(|(_, m)| m.roles.contains(&RoleId(cfg.role_2137)))
             .collect();
-        println!("got {} users to mute", vec.len());
+        info!("got {} users to mute", vec.len());
 
         for (id, m) in vec {
             let res = m
@@ -45,8 +45,8 @@ async fn interval_task(cfg_lock: &Arc<RwLock<Config>>, ctx: Arc<Context>) -> Res
                 .await;
 
             match res {
-                Ok(_) => println!("muted {}", m.user.tag()),
-                Err(why) => eprintln!("failed to mute {}: {:?}", id, why),
+                Ok(_) => info!("muted {}", m.user.tag()),
+                Err(why) => error!("failed to mute {}: {:?}", id, why),
             }
         }
     } else {
@@ -54,7 +54,7 @@ async fn interval_task(cfg_lock: &Arc<RwLock<Config>>, ctx: Arc<Context>) -> Res
             .iter_mut()
             .filter(|(_, m)| m.roles.contains(&RoleId(cfg.role_2137_active)))
             .collect();
-        println!("got {} users to unmute", vec.len());
+        info!("got {} users to unmute", vec.len());
 
         for (id, m) in vec {
             let res = m
@@ -65,8 +65,8 @@ async fn interval_task(cfg_lock: &Arc<RwLock<Config>>, ctx: Arc<Context>) -> Res
                 .await;
 
             match res {
-                Ok(_) => println!("unmuted {}", m.user.tag()),
-                Err(why) => eprintln!("failed to unmute {}: {:?}", id, why),
+                Ok(_) => info!("unmuted {}", m.user.tag()),
+                Err(why) => error!("failed to unmute {}: {:?}", id, why),
             }
         }
     }
@@ -82,12 +82,12 @@ pub async fn spawn(cfg_lock: Arc<RwLock<Config>>, ctx: Arc<Context>) {
     tokio::spawn(async move {
         let mut interval = interval(Duration::from_secs(secs));
 
-        println!("unmute thread started");
+        info!("unmute thread started");
 
         loop {
             interval.tick().await;
             if let Err(why) = interval_task(&c, ctx.to_owned()).await {
-                eprintln!("error while unmuting: {:?}", why);
+                error!("error while unmuting: {:?}", why);
             }
         }
     });

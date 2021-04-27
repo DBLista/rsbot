@@ -1,5 +1,5 @@
+use crate::bot::interval;
 use crate::config::GetConfig;
-use crate::interval;
 use crate::utils::*;
 use serenity::async_trait;
 use serenity::client::bridge::gateway::ChunkGuildFilter;
@@ -25,7 +25,7 @@ impl Handler {
         }
 
         if cfg.trigger().is_match(&msg.content) {
-            println!("adding 2137 role to {}", msg.author.tag());
+            info!("adding 2137 role to {}", msg.author.tag());
 
             let mut member = msg.member(&ctx).await?;
             member.add_role(&ctx, cfg.role_2137).await?;
@@ -42,8 +42,8 @@ impl EventHandler for Handler {
         let cfg = lock.read().await;
 
         if g.id == cfg.guild {
-            println!("got guild {}", g.name);
-            println!("requesting chunk with nonce '{}'", GET_MEMBERS_NONCE);
+            info!("got guild {}", g.name);
+            info!("requesting chunk with nonce '{}'", GET_MEMBERS_NONCE);
 
             ctx.shard.chunk_guild(
                 g.id,
@@ -56,7 +56,7 @@ impl EventHandler for Handler {
 
     async fn guild_members_chunk(&self, ctx: Context, chunk: GuildMembersChunkEvent) {
         if chunk.nonce == Some(GET_MEMBERS_NONCE.to_string()) {
-            println!(
+            info!(
                 "got chunk with nonce '{}' of size {}",
                 GET_MEMBERS_NONCE,
                 chunk.members.len()
@@ -69,11 +69,11 @@ impl EventHandler for Handler {
 
     async fn message(&self, ctx: Context, msg: Message) {
         if let Err(why) = self.handle_message(ctx, msg).await {
-            eprintln!("failed to handle message: {:?}", why);
+            error!("failed to handle message: {:?}", why);
         }
     }
 
     async fn ready(&self, _: Context, ready: Ready) {
-        println!("ready as {}", ready.user.tag());
+        info!("ready as {}", ready.user.tag());
     }
 }
