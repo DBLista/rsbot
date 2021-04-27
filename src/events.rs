@@ -1,4 +1,4 @@
-use crate::config::*;
+use crate::config::GetConfig;
 use crate::interval;
 use crate::utils::*;
 use serenity::async_trait;

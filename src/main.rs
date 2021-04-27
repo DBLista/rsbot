@@ -1,6 +1,5 @@
 #[macro_use]
 mod config;
-#[macro_use]
 mod events;
 mod interval;
 mod utils;

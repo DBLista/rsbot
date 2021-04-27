@@ -5,7 +5,7 @@ use serenity::client::Context;
 use serenity::prelude::TypeMapKey;
 use std::sync::Arc;
 use std::{fs, io};
-use tokio::sync::RwLock;
+use tokio::sync::{RwLock, RwLockWriteGuard};
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct Time {
