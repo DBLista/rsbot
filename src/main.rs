@@ -35,6 +35,8 @@ async fn main() {
         lock.insert::<config::Container>(cfg_lock);
     }
 
+    println!("starting client");
+
     if let Err(why) = client.start().await {
         eprintln!("error while running the client: {:?}", why);
     }

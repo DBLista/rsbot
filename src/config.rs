@@ -8,27 +8,14 @@ use std::{fs, io};
 use tokio::sync::{RwLock, RwLockWriteGuard};
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
-pub struct Time {
-    pub h: u32,
-    pub m: u32,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-struct DefaultVec<T>(Vec<T>);
-impl<T> Default for DefaultVec<T> {
-    fn default() -> Self {
-        DefaultVec(Vec::new())
-    }
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct Config {
     pub token: String,
     pub guild: u64,
     pub role_2137: u64,
     pub role_2137_active: u64,
     pub role_muted: u64,
-    pub time: Time,
+    pub time_h: u32,
+    pub time_m: u32,
     pub every_secs: u64,
 
     trigger: String,

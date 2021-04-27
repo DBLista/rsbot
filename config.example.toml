@@ -4,5 +4,6 @@ role_2137 = 0
 role_2137_active = 0
 role_muted = 0
 trigger = "(21.*37|dwa jeden trzy siedem)"
-time = { h = 21, m = 37 }
+time_h = 21
+time_m = 37
 every_secs = 30

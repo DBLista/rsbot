@@ -24,11 +24,11 @@ async fn interval_task(cfg_lock: &Arc<RwLock<Config>>, ctx: Arc<Context>) -> Res
         .members;
 
     let time = Utc::now().with_timezone(&Europe::Warsaw).time();
-    let Time { h, m } = cfg.time;
 
     // 21:37, 21:36
-    if time.hour() == h && (time.minute() == m || time.minute() == m - 1) {
-        println!("{}:{} incoming", h, m);
+    if time.hour() == cfg.time_h && (time.minute() == cfg.time_h || time.minute() == cfg.time_m - 1)
+    {
+        println!("{}:{} incoming", cfg.time_h, cfg.time_m);
 
         let vec: Vec<_> = members
             .iter_mut()
