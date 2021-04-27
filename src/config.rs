@@ -25,9 +25,13 @@ pub struct Config {
 }
 
 impl Config {
+    /// Load config either from specified path, or in case of an error - from env variables
     pub fn load(path: &str) -> io::Result<Config> {
         let contents = fs::read_to_string(path)?;
-        let cfg: Config = toml::from_str(&contents)?;
+        let cfg: Config = toml::from_str(&contents).unwrap_or_else(|_| {
+            info!("failed to read config file, switching to env");
+            envy::from_env().unwrap()
+        });
         Ok(cfg)
     }
 

@@ -12,10 +12,7 @@ extern crate rocket;
 
 #[tokio::main]
 async fn main() {
-    let cfg = Config::load("config.toml").unwrap_or_else(|_| {
-        info!("failed to read config file, switching to env");
-        envy::from_env().unwrap()
-    });
+    let cfg = Config::load("config.toml").unwrap();
 
     let mut c = bot::new(&cfg).await.expect("failed to start client");
 

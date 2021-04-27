@@ -1,6 +1,8 @@
 use crate::bot::interval;
 use crate::config::GetConfig;
 use crate::utils::*;
+use chrono::{Timelike, Utc};
+use chrono_tz::Europe;
 use serenity::async_trait;
 use serenity::client::bridge::gateway::ChunkGuildFilter;
 use serenity::client::{Context, EventHandler};
@@ -8,7 +10,7 @@ use serenity::model::channel::Message;
 use serenity::model::event::GuildMembersChunkEvent;
 use serenity::model::gateway::Ready;
 use serenity::model::guild::Guild;
-use serenity::model::id::GuildId;
+use serenity::model::id::{GuildId, RoleId};
 use std::sync::Arc;
 
 const GET_MEMBERS_NONCE: &str = "GET_MEMBERS";
@@ -29,6 +31,17 @@ impl Handler {
 
             let mut member = msg.member(&ctx).await?;
             member.add_role(&ctx, cfg.role_2137).await?;
+
+            let time = Utc::now().with_timezone(&Europe::Warsaw).time();
+            if time.hour() == cfg.time_h && time.minute() == cfg.time_m {
+                msg.delete(&ctx).await?;
+                member
+                    .add_roles(
+                        &ctx,
+                        &[RoleId(cfg.role_muted), RoleId(cfg.role_2137_active)],
+                    )
+                    .await?;
+            }
         }
 
         Ok(())

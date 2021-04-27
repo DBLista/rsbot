@@ -11,7 +11,7 @@ pub enum Error {
 macro_rules! from_error {
     ($enum:ident, $err:ty) => {
         impl From<$err> for Error {
-            fn from(e: $err) -> Error {
+            fn from(e: $err) -> Self {
                 Error::$enum(e)
             }
         }
@@ -21,3 +21,4 @@ macro_rules! from_error {
 from_error!(Serenity, serenity::Error);
 from_error!(Io, io::Error);
 from_error!(TryLock, tokio::sync::TryLockError);
+from_error!(Custom, &'static str);

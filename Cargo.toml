@@ -18,6 +18,8 @@ rocket = { git = "https://github.com/SergioBenitez/Rocket" }
 derive_more = "0.99.13"
 tracing = "0.1.23"
 tracing-subscriber = "0.2"
+systemstat = "0.1.7"
+sysinfo = "0.17.2"
 
 [dependencies.serenity]
 default-features = false
