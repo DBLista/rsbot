@@ -3,10 +3,9 @@ use serde::{Deserialize, Serialize};
 use serenity::async_trait;
 use serenity::client::Context;
 use serenity::prelude::TypeMapKey;
-use tokio::sync::RwLock;
-
 use std::sync::Arc;
 use std::{fs, io};
+use tokio::sync::RwLock;
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct Config {
