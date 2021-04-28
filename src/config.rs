@@ -3,9 +3,10 @@ use serde::{Deserialize, Serialize};
 use serenity::async_trait;
 use serenity::client::Context;
 use serenity::prelude::TypeMapKey;
+use tokio::sync::RwLock;
+
 use std::sync::Arc;
 use std::{fs, io};
-use tokio::sync::RwLock;
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct Config {
@@ -27,11 +28,16 @@ pub struct Config {
 impl Config {
     /// Load config either from specified path, or in case of an error - from env variables
     pub fn load(path: &str) -> io::Result<Config> {
-        let contents = fs::read_to_string(path)?;
-        let cfg: Config = toml::from_str(&contents).unwrap_or_else(|_| {
+        let cfg = Self::load_config_file(path).unwrap_or_else(|_| {
             info!("failed to read config file, switching to env");
             envy::from_env().unwrap()
         });
+        Ok(cfg)
+    }
+
+    fn load_config_file(path: &str) -> io::Result<Config> {
+        let contents = fs::read_to_string(path)?;
+        let cfg: Config = toml::from_str(&contents)?;
         Ok(cfg)
     }
 

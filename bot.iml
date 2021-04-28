@@ -115,6 +115,8 @@
       <sourceFolder url="file://$MODULE_DIR$/target/debug/build/winapi-323b918488618b80/out" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/target/debug/build/winapi-517a21143185c472/out" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/target/debug/build/ws2_32-sys-3d40dab0fda0de78/out" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/target/debug/build/libc-a62d425e7df4ee15/out" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/target/debug/build/syn-5bcfac09fd8a8109/out" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />
