@@ -23,7 +23,7 @@ RUN cargo build --release --bin bot
 FROM debian:buster-slim
 
 WORKDIR /home/site/wwwroot
-RUN apt-get update && apt-get install -y ca-certificates openssh && update-ca-certificates
+RUN apt-get update && apt-get install -y ca-certificates openssh-server && update-ca-certificates
 
 # Prepare app
 COPY --from=builder /app/target/release/bot /usr/local/bin
@@ -37,6 +37,9 @@ EXPOSE 8000
 # Enable SSH
 RUN echo "root:Docker!" | chpasswd
 COPY sshd_config /etc/ssh/
+RUN sudo systemctl enable ssh
+RUN sudo ufw allow ssh
+
 EXPOSE 80 2222
 
 CMD ["bot"]
