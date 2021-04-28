@@ -36,7 +36,7 @@ EXPOSE 8000
 
 # Enable SSH
 RUN echo "root:Docker!" | chpasswd
-COPY sshd_config /etc/ssh/
+RUN sudo systemctl start ssh && sudo systemctl enable ssh
 
 EXPOSE 80 2222
 
