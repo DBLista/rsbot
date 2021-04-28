@@ -23,7 +23,7 @@ RUN cargo build --release --bin bot
 FROM debian:buster-slim
 
 WORKDIR /home/site/wwwroot
-RUN apt-get update && apt-get install -y ca-certificates openssh-server && update-ca-certificates
+RUN apt-get update && apt-get install -y ca-certificates openssh-server sudo && update-ca-certificates
 
 # Prepare app
 COPY --from=builder /app/target/release/bot /usr/local/bin
@@ -41,4 +41,4 @@ COPY sshd_config /etc/ssh/
 EXPOSE 80 2222
 
 CMD ["bot"]
-CMD ["/usr/sbin/sshd"]
+CMD ["sudo", "/usr/sbin/sshd"]
