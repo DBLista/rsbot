@@ -41,4 +41,3 @@ RUN sudo systemctl start ssh && sudo systemctl enable ssh
 EXPOSE 80 2222
 
 CMD ["bot"]
-CMD ["sudo", "/usr/sbin/sshd"]
