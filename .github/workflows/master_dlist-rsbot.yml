@@ -32,7 +32,7 @@ jobs:
         push: true
         tags: ${{ secrets.REGISTRY }}.azurecr.io/rsbot:${{ github.sha }}
         file: ./Dockerfile
-        cache-from: type=registry,ref=user/app:latest
+        cache-from: type=registry,ref=rsbot:latest
         cache-to: type=inline
 
   deploy:
