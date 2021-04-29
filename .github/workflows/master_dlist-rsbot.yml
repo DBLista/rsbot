@@ -18,6 +18,8 @@ jobs:
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v1
+      with:
+        install: true
 
     - name: Cache Docker layers
       uses: actions/cache@v2
@@ -39,10 +41,11 @@ jobs:
       with:
         context: .
         push: true
+        builder: ${{ steps.buildx.outputs.name }}
         tags: ${{ secrets.REGISTRY }}.azurecr.io/rsbot:${{ github.sha }}
         file: ./Dockerfile
         cache-from: type=local,src=/tmp/.buildx-cache
-        cache-to: type=local,dest=/tmp/.buildx-cache-new
+        cache-to: type=local,mode=max,dest=/tmp/.buildx-cache-new
 
     - name: Move cache
       run: |
