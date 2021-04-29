@@ -32,11 +32,9 @@ ENV ROCKET_PORT=8000
 ENV ROCKET_ADDRESS=0.0.0.0
 ENV ROCKET_ENV=production
 
-EXPOSE 8000
-
 # Enable SSH
 RUN echo "root:Docker!" | chpasswd
 
-EXPOSE 80 2222
+EXPOSE 8000 2222
 
 CMD service ssh restart ; bot
