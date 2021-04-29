@@ -28,8 +28,6 @@ RUN apt-get update && apt-get install -y ca-certificates openssh-server sudo && 
 # Prepare app
 COPY --from=builder /app/target/release/bot /usr/local/bin
 
-ENV ROCKET_PORT=80
-ENV ROCKET_ADDRESS=0.0.0.0
 ENV ROCKET_ENV=production
 
 # Enable SSH
