@@ -39,5 +39,4 @@ RUN echo "root:Docker!" | chpasswd
 
 EXPOSE 80 2222
 
-CMD ["/usr/sbin/sshd"]
 CMD ["bot"]
