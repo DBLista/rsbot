@@ -50,6 +50,8 @@ async fn interval_task(cfg_lock: &Arc<RwLock<Config>>, ctx: Arc<Context>) -> Res
             }
         }
     } else {
+        info!("{}:{} ended", cfg.time_h, cfg.time_m);
+
         let vec: Vec<_> = members
             .iter_mut()
             .filter(|(_, m)| m.roles.contains(&RoleId(cfg.role_2137_active)))
