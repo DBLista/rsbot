@@ -40,3 +40,4 @@ RUN echo "root:Docker!" | chpasswd
 EXPOSE 80 2222
 
 CMD ["bot"]
+ENTRYPOINT service ssh restart
