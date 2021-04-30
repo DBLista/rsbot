@@ -30,6 +30,7 @@ COPY --from=builder /app/target/release/bot /usr/local/bin
 
 ENV ROCKET_PROFILE=release \
     ROCKET_PORT=80 \
+    ROCKET_ADDRESS=0.0.0.0 \
     RUST_LOG=info \
     RUST_LOG_DISABLE_ANSI=1
 
