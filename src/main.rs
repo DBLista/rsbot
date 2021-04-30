@@ -18,8 +18,17 @@ async fn main() {
     let tracing = tracing_subscriber::fmt()
         .with_env_filter(tracing_subscriber::EnvFilter::from_default_env());
 
-    let ansi = env::var("RUST_LOG_ANSI").unwrap_or("1".to_string()) == "1".to_string();
+    let ansi = env::var("RUST_LOG_DISABLE_ANSI").unwrap_or("".to_string()) != "1".to_string();
     tracing.with_ansi(ansi).init();
+
+    let a = ["ROCKET_PROFILE", "ROCKET_PORT"]
+        .iter()
+        .map(|x| (x, env::var(x).unwrap_or_default()))
+        .map(|(k, v)| format!("{}={}", k, v))
+        .collect::<Vec<String>>()
+        .join("; ");
+
+    info!("ENV VARIABLES: {}", a);
 
     let mut c = bot::new(&cfg).await.expect("failed to start client");
 
