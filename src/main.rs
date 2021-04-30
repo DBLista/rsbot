@@ -21,7 +21,7 @@ async fn main() {
     let ansi = env::var("RUST_LOG_DISABLE_ANSI").unwrap_or("".to_string()) != "1".to_string();
     tracing.with_ansi(ansi).init();
 
-    let a = ["ROCKET_PROFILE", "ROCKET_PORT"]
+    let a = ["ROCKET_PROFILE", "ROCKET_PORT", "ROCKET_ADDRESS"]
         .iter()
         .map(|x| (x, env::var(x).unwrap_or_default()))
         .map(|(k, v)| format!("{}={}", k, v))
