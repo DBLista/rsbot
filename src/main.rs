@@ -23,10 +23,27 @@ async fn main() {
 
     let a = ["ROCKET_PROFILE", "ROCKET_PORT", "ROCKET_ADDRESS"]
         .iter()
-        .map(|x| (x, env::var(x).unwrap_or_default()))
-        .map(|(k, v)| format!("{}={}", k, v))
+        .map(|key| format!("{}={}", key, env::var(key).unwrap_or_default()))
         .collect::<Vec<String>>()
         .join("; ");
+
+    /*
+    js:
+    let a = ["ROCKET_PROFILE", "ROCKET_PORT", "ROCKET_ADDRESS"]
+        .map(([k, v]) => `${k}=${process.env[x] || ""}`)
+        .join("; ");
+    */
+
+    /*
+    go:
+    arr := []string{"ROCKET_PROFILE", "ROCKET_PORT", "ROCKET_ADDRESS"}
+    var res []string
+    for _, x := range arr {
+        res = append(res, fmt.Sprintf("%v=%v", x, os.Getenv(x)))
+    }
+    let a = strings.Join("; ", res)
+
+    */
 
     info!("ENV VARIABLES: {}", a);
 

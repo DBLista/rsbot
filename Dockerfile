@@ -36,6 +36,7 @@ ENV ROCKET_PROFILE=release \
 
 # Enable SSH
 RUN echo "root:Docker!" | chpasswd
+COPY sshd_config /etc/ssh/
 
 EXPOSE 80 2222
 
