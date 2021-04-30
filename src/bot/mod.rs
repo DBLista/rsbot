@@ -21,7 +21,5 @@ pub async fn new(cfg: &Config) -> Result<Client, serenity::Error> {
         lock.insert::<ConfigContainer>(Arc::new(RwLock::new(cfg.clone())));
     }
 
-    tracing_subscriber::fmt::init();
-
     Ok(client)
 }

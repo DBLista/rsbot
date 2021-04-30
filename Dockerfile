@@ -28,7 +28,7 @@ RUN apt-get update && apt-get install -y ca-certificates openssh-server sudo && 
 # Prepare app
 COPY --from=builder /app/target/release/bot /usr/local/bin
 
-ENV ROCKET_ENV=production
+ENV ROCKET_PROFILE=release RUST_LOG=info RUST_LOG_ANSI=0
 
 # Enable SSH
 RUN echo "root:Docker!" | chpasswd
