@@ -32,9 +32,10 @@ impl Handler {
             let mut member = msg.member(&ctx).await?;
             member.add_role(&ctx, cfg.role_2137).await?;
 
+            msg.delete(&ctx).await?;
+
             let time = Utc::now().with_timezone(&Europe::Warsaw).time();
             if time.hour() == cfg.time_h && time.minute() == cfg.time_m {
-                msg.delete(&ctx).await?;
                 member
                     .add_roles(
                         &ctx,
