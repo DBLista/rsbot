@@ -23,12 +23,19 @@ async fn interval_task(cfg_lock: &Arc<RwLock<Config>>, ctx: Arc<Context>) -> Res
         .ok_or(Error::Custom("expected guild"))?
         .members;
 
-    let time = Utc::now().with_timezone(&Europe::Warsaw).time();
+    let utc_now = Utc::now();
+    let time = utc_now.with_timezone(&Europe::Warsaw).time();
 
     // 21:37, 21:36
     if time.hour() == cfg.time_h && (time.minute() == cfg.time_h || time.minute() == cfg.time_m - 1)
     {
-        info!("{}:{} incoming", cfg.time_h, cfg.time_m);
+        info!(
+            "{}:{} (utc: {}, warsaw: {})",
+            cfg.time_h,
+            cfg.time_m,
+            utc_now.time().format("%H:%M:%S"),
+            time.format("%H:%M:%S")
+        );
 
         let vec: Vec<_> = members
             .iter_mut()

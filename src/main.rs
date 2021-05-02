@@ -21,31 +21,15 @@ async fn main() {
     let ansi = env::var("RUST_LOG_DISABLE_ANSI").unwrap_or("".to_string()) != "1".to_string();
     tracing.with_ansi(ansi).init();
 
-    let a = ["ROCKET_PROFILE", "ROCKET_PORT", "ROCKET_ADDRESS"]
-        .iter()
-        .map(|key| format!("{}={}", key, env::var(key).unwrap_or_default()))
-        .collect::<Vec<String>>()
-        .join("; ");
+    /*let a = ["ROCKET_PROFILE", "ROCKET_PORT", "ROCKET_ADDRESS"]
+    .iter()
+    .map(|key| format!("{}={}", key, env::var(key).unwrap_or_default()))
+    .collect::<Vec<String>>()
+    .join("; ");*/
 
-    /*
-    js:
-    let a = ["ROCKET_PROFILE", "ROCKET_PORT", "ROCKET_ADDRESS"]
-        .map(([k, v]) => `${k}=${process.env[x] || ""}`)
-        .join("; ");
-    */
+    // info!("env variables: {}", a);
 
-    /*
-    go:
-    arr := []string{"ROCKET_PROFILE", "ROCKET_PORT", "ROCKET_ADDRESS"}
-    var res []string
-    for _, x := range arr {
-        res = append(res, fmt.Sprintf("%v=%v", x, os.Getenv(x)))
-    }
-    let a = strings.Join("; ", res)
-
-    */
-
-    info!("ENV VARIABLES: {}", a);
+    info!("config time set to {}:{}", cfg.time_h, cfg.time_m);
 
     let mut c = bot::new(&cfg).await.expect("failed to start client");
 
