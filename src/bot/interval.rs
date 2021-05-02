@@ -27,7 +27,7 @@ async fn interval_task(cfg_lock: &Arc<RwLock<Config>>, ctx: Arc<Context>) -> Res
     let time = utc_now.with_timezone(&Europe::Warsaw).time();
 
     // 21:37, 21:36
-    if time.hour() == cfg.time_h && (time.minute() == cfg.time_h || time.minute() == cfg.time_m - 1)
+    if time.hour() == cfg.time_h && (time.minute() == cfg.time_m || time.minute() == cfg.time_m - 1)
     {
         info!(
             "{}:{} (utc: {}, warsaw: {})",
